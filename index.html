@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Layout HTML Formulir Pendaftaran -->
+    <div class="wrapper">
+      <!-- Judul Formulir -->
+      <h2>Formulir Pendaftaran</h2>
+      <!-- Form dengan id utk dipanggil oleh javascript untuk validasi sesuai ketentuan serta input box yang ditentukan -->
+      <form action="#" id="registrationForm">
+        <div class="input-box">
+          <input
+            type="text"
+            id="username"
+            placeholder="Masukkan username Anda"
+            required
+          />
+          <small id="usernameError" style="color: red; display: none"
+            >Username harus 5-20 karakter alfanumerik.</small
+          >
+        </div>
+        <div class="input-box">
+          <input
+            type="text"
+            id="email"
+            placeholder="Masukkan email Anda"
+            required
+          />
+          <small id="emailError" style="color: red; display: none"
+            >Format email tidak valid.</small
+          >
+        </div>
+        <div class="input-box">
+          <input
+            type="password"
+            id="password"
+            placeholder="Buat password"
+            required
+          />
+          <small id="passwordStrength" style="color: red; display: none"
+            >Password harus minimal 8 karakter dan mencakup huruf dan
+            angka.</small
+          >
+        </div>
+        <div class="input-box">
+          <input
+            type="password"
+            id="confirmPassword"
+            placeholder="Konfirmasi password"
+            required
+          />
+          <small id="confirmPasswordError" style="color: red; display: none"
+            >Password tidak cocok.</small
+          >
+        </div>
+        <div class="policy">
+          <input type="checkbox" id="terms" />
+          <h3>Saya menerima semua syarat & ketentuan</h3>
+        </div>
+        <div class="input-box button">
+          <input type="submit" value="Daftar Sekarang" />
+        </div>
+        <div class="text">
+          <h3>Sudah punya akun? <a href="#">Masuk sekarang</a></h3>
+        </div>
+      </form>
+    </div>
+
+    <script>
+      // Validasi Username dengan ketentuan 5-16 karakter dan alfanumerik atau kombinasi huruf dan angka
+      document
+        .getElementById("username")
+        .addEventListener("keyup", function () {
+          const username = this.value;
+          const error = document.getElementById("usernameError");
+          const usernameRegex = /^[a-zA-Z0-9]{5,20}$/;
+          if (!usernameRegex.test(username)) {
+            error.style.display = "block";
+          } else {
+            error.style.display = "none";
+          }
+        });
+
+      // Validasi format Email sesuai dengan regex yang di tentukan
+      document.getElementById("email").addEventListener("change", function () {
+        const email = this.value;
+        const error = document.getElementById("emailError");
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+          error.style.display = "block";
+        } else {
+          error.style.display = "none";
+        }
+      });
+
+      // Validasi kekuatan keamanan yang di buat
+      document
+        .getElementById("password")
+        .addEventListener("keyup", function () {
+          const password = this.value;
+          const strengthMsg = document.getElementById("passwordStrength");
+          const strongPasswordRegex = /^(?=.*[0-9])(?=.*[a-zA-Z]).{8,}$/;
+          if (!strongPasswordRegex.test(password)) {
+            strengthMsg.style.display = "block";
+          } else {
+            strengthMsg.style.display = "none";
+          }
+        });
+
+      // Validasi Konfirmasi Password saat input ulang password
+      document
+        .getElementById("confirmPassword")
+        .addEventListener("input", function () {
+          const confirmPassword = this.value;
+          const password = document.getElementById("password").value;
+          const error = document.getElementById("confirmPasswordError");
+          if (confirmPassword !== password) {
+            error.style.display = "block";
+          } else {
+            error.style.display = "none";
+          }
+        });
+
+      // Validasi akhir saat submit dengan validasi field kosong dan allert tambahan jika diisi tapi tidak sesuai
+      document
+        .getElementById("registrationForm")
+        .addEventListener("submit", function (event) {
+          const username = document.getElementById("username").value;
+          const email = document.getElementById("email").value;
+          const password = document.getElementById("password").value;
+          const confirmPassword =
+            document.getElementById("confirmPassword").value;
+          const terms = document.getElementById("terms").checked;
+
+          if (
+            username.length < 5 ||
+            username.length > 20 ||
+            !/^[a-zA-Z0-9]+$/.test(username)
+          ) {
+            alert("Username harus 5-20 karakter alfanumerik.");
+            event.preventDefault();
+          } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            alert("Format email tidak valid.");
+            event.preventDefault();
+          } else if (!/^(?=.*[0-9])(?=.*[a-zA-Z]).{8,}$/.test(password)) {
+            alert(
+              "Password harus minimal 8 karakter dan mencakup huruf dan angka."
+            );
+            event.preventDefault();
+          } else if (password !== confirmPassword) {
+            alert("Password dan konfirmasi password tidak cocok.");
+            event.preventDefault();
+          } else if (!terms) {
+            alert("Anda harus menerima syarat & ketentuan.");
+            event.preventDefault();
+          }
+        });
+    </script>
+  </body>
+</html>
